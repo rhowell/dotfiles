@@ -19,6 +19,7 @@ Plugin 'tpope/vim-bundler'
 Plugin 'tpope/vim-fugitive'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-rails'
+Plugin 'tpope/vim-fireplace'
 Plugin 'thoughtbot/vim-rspec'
 Plugin 'christoomey/vim-tmux-navigator'
 
@@ -36,6 +37,7 @@ set hidden
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
+set expandtab
 set autoindent
 set incsearch
 set showmatch
@@ -60,6 +62,10 @@ set backspace=indent,eol,start
 "Line Numbers
 set nu
 set nowrap
+
+" Reselect block after indent
+vnoremap < <gv
+vnoremap > >gv
 
 " Move around splits with <c-hjkl>
 nnoremap <c-j> <c-w>j
@@ -122,7 +128,7 @@ let g:airline_section_warning = ''
 """"""""""""""""""""""
 " RSpec
 """"""""""""""""""""""
-let g:rspec_command = 'call Send_to_Tmux("rspec {spec}\n")'
+let g:rspec_command = 'call Send_to_Tmux("clear; tmux clear-history; rspec {spec}\n")'
 
 map <Leader>t :call RunCurrentSpecFile()<CR>
 map <Leader>c :call RunNearestSpec()<CR>
@@ -138,7 +144,8 @@ function! AlternateForCurrentFile()
   let new_file = current_file
   let in_spec = match(current_file, '^spec/') != -1
   let going_to_spec = !in_spec
-  let in_app = match(current_file, '\<controllers\>') != -1 || match(current_file, '\<models\>') != -1 || match(current_file, '\<views\>') != -1 || match(current_file, '\<helpers\>') != -1
+  let in_app = match(current_file, '\<controllers\>') != -1 || match(current_file, '\<models\>') != -1 || match(current_file, '\<views\>') != -1 || match(current_file, '\<helpers\>') != -1 || match(current_file, '\<workers\>') != -1
+
   if going_to_spec
     if in_app
       let new_file = substitute(new_file, '^app/', '', '')
@@ -168,3 +175,11 @@ function! FocusOnFile()
 	exec ':vsp ' . new_file
 endfunction
 
+" taken from: http://stackoverflow.com/questions/356126/how-can-you-automatically-remove-trailing-whitespace-in-vim/1618401#1618401
+fun! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+autocmd BufWritePre *.rb :call <SID>StripTrailingWhitespaces()
