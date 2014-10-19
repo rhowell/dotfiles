@@ -16,6 +16,8 @@ alias gs='git status'
 alias gco='git checkout'
 alias gc='git commit'
 alias bower='noglob bower'
+alias pi='cd ~/pi; qemu-system-arm -cpu arm1176 -m 256 -M versatilepb -no-reboot -serial stdio -append "root=/dev/sda2 panic=1 rootfstype=ext4 rw" -kernel kernel-qemu -hda 2014-09-09-wheezy-raspbian.img'
+alias rpmls='rpm -q -filesbypkg'
 
 
 # Uncomment the following line to use case-sensitive completion.
@@ -55,13 +57,13 @@ alias bower='noglob bower'
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+plugins=(git zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="/Users/rhowell/.rvm/gems/ruby-2.1.2/bin:/Users/rhowell/.rvm/gems/ruby-2.1.2@global/bin:/Users/rhowell/.rvm/rubies/ruby-2.1.2/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/rhowell/.rvm/bin"
+export PATH="/Users/rhowell/.rvm/gems/ruby-2.1.2/bin:/Users/rhowell/.rvm/gems/ruby-2.1.2@global/bin:/Users/rhowell/.rvm/rubies/ruby-2.1.2/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/rhowell/.rvm/bin:/Users/rhowell/bin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -80,3 +82,9 @@ export PATH="/Users/rhowell/.rvm/gems/ruby-2.1.2/bin:/Users/rhowell/.rvm/gems/ru
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 export PATH=/usr/local/bin:$PATH
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export PATH=/usr/local/sbin:$PATH
+
+PERL_MB_OPT="--install_base \"/Users/rhowell/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/rhowell/perl5"; export PERL_MM_OPT;

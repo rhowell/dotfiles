@@ -7,21 +7,25 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'mortice/pbcopy.vim'
-Plugin 'kien/rainbow_parentheses.vim'
-Plugin 'edkolev/tmuxline.vim'
-Plugin 'jgdavey/tslime.vim'
 Plugin 'bling/vim-airline'
-Plugin 'tpope/vim-bundler'
-Plugin 'tpope/vim-fugitive'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-fireplace'
-Plugin 'thoughtbot/vim-rspec'
 Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'edkolev/tmuxline.vim'
+Plugin 'gmarik/Vundle.vim'
+Plugin 'guns/vim-clojure-static'
+Plugin 'heartsentwined/vim-emblem'
+Plugin 'jgdavey/tslime.vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'mortice/pbcopy.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'sheerun/vim-polyglot'
+Plugin 'thoughtbot/vim-rspec'
+Plugin 'tpope/vim-bundler'
+Plugin 'tpope/vim-classpath'
+Plugin 'tpope/vim-fireplace'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-rails'
+Plugin 'kovisoft/slimv'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -30,6 +34,7 @@ syntax on
 """"""""""""""""""""""
 " General Vim Config
 """"""""""""""""""""""
+set clipboard=unnamed
 let mapleader = ','
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip 
 " allow unsaved background buffers and remember marks/undo for them
@@ -83,6 +88,7 @@ set splitright
 " Ctrl-P
 """"""""""""""""""""""
 map <leader>k :CtrlP<cr>
+let g:ctrlp_custom_ignore = '\v(vendor|node_modules)$'
 
 """"""""""""""""""""""
 " NERDTree
@@ -104,7 +110,6 @@ let g:rbpt_colorpairs = [
     \ ['darkmagenta', 'DarkOrchid3'],
     \ ['brown',       'firebrick3'],
     \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
     \ ['darkmagenta', 'DarkOrchid3'],
     \ ['Darkblue',    'firebrick3'],
     \ ['darkgreen',   'RoyalBlue3'],
