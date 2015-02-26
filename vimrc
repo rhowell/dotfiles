@@ -13,19 +13,21 @@ Plugin 'edkolev/tmuxline.vim'
 Plugin 'gmarik/Vundle.vim'
 Plugin 'guns/vim-clojure-static'
 Plugin 'heartsentwined/vim-emblem'
-Plugin 'jgdavey/tslime.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'mortice/pbcopy.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'thoughtbot/vim-rspec'
+Plugin 'tpope/vim-leiningen'
 Plugin 'tpope/vim-bundler'
 Plugin 'tpope/vim-classpath'
 Plugin 'tpope/vim-fireplace'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-rails'
-Plugin 'kovisoft/slimv'
+Plugin 'elzr/vim-json'
+Plugin 'wakatime/vim-wakatime'
+"Plugin 'ryanss/vim-hackernews'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -88,7 +90,7 @@ set splitright
 " Ctrl-P
 """"""""""""""""""""""
 map <leader>k :CtrlP<cr>
-let g:ctrlp_custom_ignore = '\v(vendor|node_modules)$'
+let g:ctrlp_custom_ignore = '\v(vendor|node_modules|target)$'
 
 """"""""""""""""""""""
 " NERDTree
@@ -101,22 +103,22 @@ map <leader>ns :NERDTreeFind<cr>
 " Rainbow Parens
 """"""""""""""""""""""
 let g:rbpt_colorpairs = [
-    \ ['brown',       'RoyalBlue3'],
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ['red',         'firebrick3'],
-    \ ]
+      \ ['brown',       'RoyalBlue3'],
+      \ ['Darkblue',    'SeaGreen3'],
+      \ ['darkgray',    'DarkOrchid3'],
+      \ ['darkgreen',   'firebrick3'],
+      \ ['darkcyan',    'RoyalBlue3'],
+      \ ['darkred',     'SeaGreen3'],
+      \ ['darkmagenta', 'DarkOrchid3'],
+      \ ['brown',       'firebrick3'],
+      \ ['gray',        'RoyalBlue3'],
+      \ ['darkmagenta', 'DarkOrchid3'],
+      \ ['Darkblue',    'firebrick3'],
+      \ ['darkgreen',   'RoyalBlue3'],
+      \ ['darkcyan',    'SeaGreen3'],
+      \ ['darkred',     'DarkOrchid3'],
+      \ ['red',         'firebrick3'],
+      \ ]
 
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
@@ -175,16 +177,32 @@ endfunction
 
 nnoremap <leader>s :call FocusOnFile()<cr>
 function! FocusOnFile()
-	exec ':only'
+  exec ':only'
   let new_file = AlternateForCurrentFile()
-	exec ':vsp ' . new_file
+  exec ':vsp ' . new_file
 endfunction
 
 " taken from: http://stackoverflow.com/questions/356126/how-can-you-automatically-remove-trailing-whitespace-in-vim/1618401#1618401
 fun! <SID>StripTrailingWhitespaces()
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    call cursor(l, c)
+  let l = line(".")
+  let c = col(".")
+  %s/\s\+$//e
+  call cursor(l, c)
 endfun
 autocmd BufWritePre *.rb :call <SID>StripTrailingWhitespaces()
+
+
+" Toggle word wrap
+noremap <silent> <Leader>w :call ToggleWrap()<CR>
+function ToggleWrap()
+  if &wrap
+    echo "Wrap OFF"
+    setlocal nowrap
+    set virtualedit=all
+  else
+    echo "Wrap ON"
+    setlocal wrap linebreak nolist
+    set virtualedit=
+    setlocal display+=lastline
+  endif
+endfunction

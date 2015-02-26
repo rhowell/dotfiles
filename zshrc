@@ -18,7 +18,9 @@ alias gc='git commit'
 alias bower='noglob bower'
 alias pi='cd ~/pi; qemu-system-arm -cpu arm1176 -m 256 -M versatilepb -no-reboot -serial stdio -append "root=/dev/sda2 panic=1 rootfstype=ext4 rw" -kernel kernel-qemu -hda 2014-09-09-wheezy-raspbian.img'
 alias rpmls='rpm -q -filesbypkg'
-
+alias gi='ghci-color'
+alias doclean='docker rmi $(docker images -a -q); docker rm -f $(docker ps -a -q)'
+alias docsh='docker run -ti `docker images -q | head -1` /bin/bash'
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -63,7 +65,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="/Users/rhowell/.rvm/gems/ruby-2.1.2/bin:/Users/rhowell/.rvm/gems/ruby-2.1.2@global/bin:/Users/rhowell/.rvm/rubies/ruby-2.1.2/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/rhowell/.rvm/bin:/Users/rhowell/bin:$PATH"
+export PATH="/Users/rhowell/bin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -83,8 +85,28 @@ export PATH="/Users/rhowell/.rvm/gems/ruby-2.1.2/bin:/Users/rhowell/.rvm/gems/ru
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 export PATH=/usr/local/bin:$PATH
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export PATH=/usr/local/sbin:$PATH
 
 PERL_MB_OPT="--install_base \"/Users/rhowell/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/rhowell/perl5"; export PERL_MM_OPT;
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+export EC2_HOME=/usr/local/ec2/ec2-api-tools-1.7.2.3 
+export PATH=$PATH:$EC2_HOME/bin:/Users/rhowell/local/bin:~/.nimble/bin
+
+export DEEPDIVE_HOME=/Users/rhowell/source/opc/deepdive
+export LD_LIBRARY_PATH=$DEEPDIVE_HOME/lib/dw_mac/lib/protobuf/lib:$DEEPDIVE_HOME/lib/dw_mac/lib
+export DYLD_LIBRARY_PATH=$DEEPDIVE_HOME/lib/dw_mac
+
+# Extended blobbing, ex: ll **/*(.x) (recursive search for executable files
+setopt extendedglob
+
+
+export DOCKER_HOST=tcp://192.168.59.103:2376
+export DOCKER_CERT_PATH=/Users/rhowell/.boot2docker/certs/boot2docker-vm
+export DOCKER_TLS_VERIFY=1
+
+# AWS Autocomplete
+source /usr/local/share/zsh/site-functions/_aws
