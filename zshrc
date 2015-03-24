@@ -21,6 +21,8 @@ alias rpmls='rpm -q -filesbypkg'
 alias gi='ghci-color'
 alias doclean='docker rmi $(docker images -a -q); docker rm -f $(docker ps -a -q)'
 alias docsh='docker run -ti `docker images -q | head -1` /bin/bash'
+alias repl='lein clean && lein repl'
+alias outdated='brew update && echo "\nOutdated:" && brew outdated'
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -65,7 +67,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="/Users/rhowell/bin:$PATH"
+export PATH="/Users/rhowell/bin:/Users/rhowell/Library/Android/sdk/platform-tools:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
