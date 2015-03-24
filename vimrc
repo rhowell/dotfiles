@@ -14,19 +14,18 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'guns/vim-clojure-static'
 Plugin 'heartsentwined/vim-emblem'
 Plugin 'kien/ctrlp.vim'
-Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'mortice/pbcopy.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'thoughtbot/vim-rspec'
-Plugin 'tpope/vim-leiningen'
 Plugin 'tpope/vim-bundler'
-Plugin 'tpope/vim-classpath'
 Plugin 'tpope/vim-fireplace'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-rails'
 Plugin 'elzr/vim-json'
 Plugin 'wakatime/vim-wakatime'
+Plugin 'luochen1990/rainbow'
+Plugin 'vim-clojure-highlight'
 "Plugin 'ryanss/vim-hackernews'
 
 call vundle#end()            " required
@@ -36,6 +35,15 @@ syntax on
 """"""""""""""""""""""
 " General Vim Config
 """"""""""""""""""""""
+" Ctrl-Enter for escape mode (must be mapped in iTerm: map Ctrl-Enter to
+" send text ✠)
+cnoremap ✠ <esc>
+inoremap ✠ <esc>
+nnoremap ✠ <esc>
+noremap ✠ <esc>
+onoremap ✠ <esc>
+vnoremap ✠ <esc>
+map <esc> :nohl<CR>
 set clipboard=unnamed
 let mapleader = ','
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip 
@@ -51,26 +59,23 @@ set showmatch
 set hlsearch
 " make searches case-sensitive only if they contain upper-case characters
 set ignorecase smartcase
-map <esc> :nohlsearch<cr>
 set cmdheight=1
 set switchbuf=useopen
-" This makes RVM work inside Vim. I have no idea why.
-set shell=bash
-" Prevent Vim from clobbering the scrollback buffer. See
+" prevent vim from clobbering the scrollback buffer. see
 " http://www.shallowsky.com/linux/noaltscreen.html
 set t_ti= t_te=
-" Don't make backups at all
+" don't make backups at all
 set nobackup
 set nowritebackup
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
-"Line Numbers
+"line numbers
 set nu
 set nowrap
 
-" Reselect block after indent
+" reselect block after indent
 vnoremap < <gv
 vnoremap > >gv
 
@@ -102,28 +107,29 @@ map <leader>ns :NERDTreeFind<cr>
 """"""""""""""""""""""
 " Rainbow Parens
 """"""""""""""""""""""
-let g:rbpt_colorpairs = [
-      \ ['brown',       'RoyalBlue3'],
-      \ ['Darkblue',    'SeaGreen3'],
-      \ ['darkgray',    'DarkOrchid3'],
-      \ ['darkgreen',   'firebrick3'],
-      \ ['darkcyan',    'RoyalBlue3'],
-      \ ['darkred',     'SeaGreen3'],
-      \ ['darkmagenta', 'DarkOrchid3'],
-      \ ['brown',       'firebrick3'],
-      \ ['gray',        'RoyalBlue3'],
-      \ ['darkmagenta', 'DarkOrchid3'],
-      \ ['Darkblue',    'firebrick3'],
-      \ ['darkgreen',   'RoyalBlue3'],
-      \ ['darkcyan',    'SeaGreen3'],
-      \ ['darkred',     'DarkOrchid3'],
-      \ ['red',         'firebrick3'],
-      \ ]
-
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+let g:rainbow_active = 1
+let g:rainbow_conf = {
+    \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+    \   'ctermfgs': ['darkred', 'darkgreen', 'brown', 'darkcyan', 'darkmagenta', 'yellow'],
+    \   'operators': '_,_',
+    \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+    \   'separately': {
+    \       '*': {},
+    \       'tex': {
+    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+    \       },
+    \       'lisp': {
+    \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+    \       },
+    \       'vim': {
+    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+    \       },
+    \       'html': {
+    \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+    \       },
+    \       'css': 0,
+    \   }
+    \}
 
 """"""""""""""""""""""
 " Airline
@@ -189,12 +195,12 @@ fun! <SID>StripTrailingWhitespaces()
   %s/\s\+$//e
   call cursor(l, c)
 endfun
-autocmd BufWritePre *.rb :call <SID>StripTrailingWhitespaces()
+autocmd BufWritePre *.rb,*.clj :call <SID>StripTrailingWhitespaces()
 
 
 " Toggle word wrap
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
-function ToggleWrap()
+function! ToggleWrap()
   if &wrap
     echo "Wrap OFF"
     setlocal nowrap
